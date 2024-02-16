@@ -1,19 +1,12 @@
-use anyhow::bail;
+mod lexer;
+mod parser;
+
 use anyhow::Result;
+use parser::Value;
 
 pub fn from_str(s: &str) -> Result<Value> {
-    match s {
-        "true" => Ok(Value::Bool(true)),
-        "false" => Ok(Value::Bool(false)),
-        _ => bail!("Invalid input"),
-    }
+    parser::parse(lexer::tokenize(s)?)
 }
-
-#[derive(Debug, PartialEq)]
-pub enum Value {
-    Bool(bool),
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
