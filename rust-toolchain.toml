@@ -1,2 +1,4 @@
 [toolchain]
-channel = "nightly"
+
+channel = "1.76.0"
+profile = "default"

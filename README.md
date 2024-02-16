@@ -1,4 +1,6 @@
-# USAGE
+# json parser
+
+## Usage
 
 ```rust
 let json_str = r#"
@@ -10,7 +12,7 @@ let json_str = r#"
         "movie"
       ]
     }
-    "#;
+"#;
 
     let v = json::from_str(json_str).unwrap();
 
