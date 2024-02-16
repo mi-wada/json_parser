@@ -6,12 +6,14 @@ pub(crate) fn parse(tokens: Vec<Token>) -> Result<Value> {
     match tokens[0] {
         Token::True => Ok(Value::Bool(true)),
         Token::False => Ok(Value::Bool(false)),
+        Token::Null => Ok(Value::Null),
     }
 }
 
 #[derive(Debug, PartialEq)]
 pub enum Value {
     Bool(bool),
+    Null,
 }
 
 #[cfg(test)]
@@ -29,5 +31,6 @@ mod tests {
             parse(tokenize("false").unwrap()).ok().unwrap(),
             Value::Bool(false)
         );
+        assert_eq!(parse(tokenize("null").unwrap()).ok().unwrap(), Value::Null);
     }
 }

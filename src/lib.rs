@@ -12,13 +12,12 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_bool() {
+    fn test_from_str() {
         assert_eq!(from_str("true").ok().unwrap(), Value::Bool(true));
         assert_eq!(from_str("false").ok().unwrap(), Value::Bool(false));
-    }
 
-    #[test]
-    fn test_invalid() {
+        assert_eq!(from_str("null").ok().unwrap(), Value::Null);
+
         assert!(from_str("invalid").is_err());
     }
 }
