@@ -19,3 +19,11 @@ let json_str = r#"
     println!("{:?}", v);
     // => Object({"hobby": Array([String("music"), String("movie")]), "name": String("mitsuaki"), "age": Number(24)})
 ```
+
+## Development
+
+### How to run test?
+
+```shell
+cargo test
+```
