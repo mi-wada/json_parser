@@ -18,6 +18,19 @@ mod tests {
             Value::String("hello".to_string())
         );
 
+        assert_eq!(
+            from_str("123").ok().unwrap(),
+            Value::Number(parser::Number::Integer(123))
+        );
+        assert_eq!(
+            from_str("123.456").ok().unwrap(),
+            Value::Number(parser::Number::Float(123.456))
+        );
+        assert_eq!(
+            from_str("-123.456").ok().unwrap(),
+            Value::Number(parser::Number::Float(-123.456))
+        );
+
         assert_eq!(from_str("true").ok().unwrap(), Value::Bool(true));
         assert_eq!(from_str("false").ok().unwrap(), Value::Bool(false));
 

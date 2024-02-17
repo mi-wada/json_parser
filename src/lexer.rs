@@ -49,19 +49,48 @@ pub(crate) fn tokenize(s: &str) -> Result<Vec<Token>> {
                     }
                 }
             }
+            c if c.is_ascii_digit() || c == '-' => {
+                let mut number = String::new();
+                number.push(c);
+                while let Some(&c) = chars.peek() {
+                    if c.is_ascii_digit() || c == '.' {
+                        number.push(c);
+                        chars.next();
+                    } else {
+                        break;
+                    }
+                }
+                if number.contains('.') {
+                    tokens.push(Token::Number(Number::Float(
+                        number.parse().expect("Invalid number"),
+                    )));
+                } else {
+                    tokens.push(Token::Number(Number::Integer(
+                        number.parse().expect("Invalid number"),
+                    )));
+                }
+            }
             ' ' | '\n' | '\r' => continue,
             _ => bail!("Invalid input"),
         }
     }
-    return Ok(tokens);
+
+    Ok(tokens)
 }
 
 #[derive(Debug, PartialEq)]
 pub(crate) enum Token {
     String(String),
+    Number(Number),
     True,
     False,
     Null,
+}
+
+#[derive(Debug, PartialEq)]
+pub(crate) enum Number {
+    Integer(i64),
+    Float(f64),
 }
 
 #[cfg(test)]
@@ -73,6 +102,15 @@ mod tests {
         assert_eq!(
             tokenize(r#""hello""#).ok().unwrap(),
             vec![Token::String("hello".to_string())]
+        );
+
+        assert_eq!(
+            tokenize("123").ok().unwrap(),
+            vec![Token::Number(Number::Integer(123))]
+        );
+        assert_eq!(
+            tokenize("123.456").ok().unwrap(),
+            vec![Token::Number(Number::Float(123.456))]
         );
 
         assert_eq!(tokenize("true").ok().unwrap(), vec![Token::True]);
