@@ -70,6 +70,9 @@ pub(crate) fn tokenize(s: &str) -> Result<Vec<Token>> {
                     )));
                 }
             }
+            '[' => tokens.push(Token::LBracket),
+            ']' => tokens.push(Token::RBracket),
+            ',' => tokens.push(Token::Comma),
             ' ' | '\n' | '\r' => continue,
             _ => bail!("Invalid input"),
         }
@@ -85,6 +88,9 @@ pub(crate) enum Token {
     True,
     False,
     Null,
+    LBracket, // [
+    RBracket, // ]
+    Comma,
 }
 
 #[derive(Debug, PartialEq)]
@@ -117,6 +123,17 @@ mod tests {
         assert_eq!(tokenize("false").ok().unwrap(), vec![Token::False]);
 
         assert_eq!(tokenize("null").ok().unwrap(), vec![Token::Null]);
+
+        assert_eq!(
+            tokenize("[null, null]").ok().unwrap(),
+            vec![
+                Token::LBracket,
+                Token::Null,
+                Token::Comma,
+                Token::Null,
+                Token::RBracket
+            ]
+        );
 
         assert!(tokenize("invalid").is_err());
     }

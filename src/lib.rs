@@ -14,6 +14,18 @@ mod tests {
     #[test]
     fn test_from_str() {
         assert_eq!(
+            from_str(r#"["hello", 123, ["hello", 123]]"#).ok().unwrap(),
+            Value::Array(vec![
+                Value::String("hello".to_string()),
+                Value::Number(parser::Number::Integer(123)),
+                Value::Array(vec![
+                    Value::String("hello".to_string()),
+                    Value::Number(parser::Number::Integer(123))
+                ])
+            ])
+        );
+
+        assert_eq!(
             from_str(r#""hello""#).ok().unwrap(),
             Value::String("hello".to_string())
         );
