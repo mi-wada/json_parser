@@ -73,6 +73,9 @@ pub(crate) fn tokenize(s: &str) -> Result<Vec<Token>> {
             '[' => tokens.push(Token::LBracket),
             ']' => tokens.push(Token::RBracket),
             ',' => tokens.push(Token::Comma),
+            '{' => tokens.push(Token::LBrace),
+            '}' => tokens.push(Token::RBrace),
+            ':' => tokens.push(Token::Colon),
             ' ' | '\n' | '\r' => continue,
             _ => bail!("Invalid input"),
         }
@@ -90,6 +93,9 @@ pub(crate) enum Token {
     Null,
     LBracket, // [
     RBracket, // ]
+    LBrace,   // {
+    RBrace,   // }
+    Colon,    // :
     Comma,
 }
 
@@ -132,6 +138,17 @@ mod tests {
                 Token::Comma,
                 Token::Null,
                 Token::RBracket
+            ]
+        );
+
+        assert_eq!(
+            tokenize(r#"{"hello": "world"}"#).ok().unwrap(),
+            vec![
+                Token::LBrace,
+                Token::String("hello".to_string()),
+                Token::Colon,
+                Token::String("world".to_string()),
+                Token::RBrace
             ]
         );
 

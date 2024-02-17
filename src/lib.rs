@@ -14,6 +14,29 @@ mod tests {
     #[test]
     fn test_from_str() {
         assert_eq!(
+            from_str(r#"{"hello": [12, -12, 12.345 "abc", true], "world": null}"#)
+                .ok()
+                .unwrap(),
+            Value::Object(
+                vec![
+                    (
+                        "hello".to_string(),
+                        Value::Array(vec![
+                            Value::Number(parser::Number::Integer(12)),
+                            Value::Number(parser::Number::Integer(-12)),
+                            Value::Number(parser::Number::Float(12.345)),
+                            Value::String("abc".to_string()),
+                            Value::Bool(true)
+                        ])
+                    ),
+                    ("world".to_string(), Value::Null)
+                ]
+                .into_iter()
+                .collect()
+            )
+        );
+
+        assert_eq!(
             from_str(r#"["hello", 123, ["hello", 123]]"#).ok().unwrap(),
             Value::Array(vec![
                 Value::String("hello".to_string()),
