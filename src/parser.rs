@@ -4,6 +4,7 @@ use crate::lexer::Token;
 
 pub(crate) fn parse(tokens: Vec<Token>) -> Result<Value> {
     match tokens[0] {
+        Token::String(ref s) => Ok(Value::String(s.clone())),
         Token::True => Ok(Value::Bool(true)),
         Token::False => Ok(Value::Bool(false)),
         Token::Null => Ok(Value::Null),
@@ -12,6 +13,7 @@ pub(crate) fn parse(tokens: Vec<Token>) -> Result<Value> {
 
 #[derive(Debug, PartialEq)]
 pub enum Value {
+    String(String),
     Bool(bool),
     Null,
 }
@@ -24,6 +26,11 @@ mod tests {
     #[test]
     fn test_parse() {
         assert_eq!(
+            parse(tokenize(r#""hello""#).unwrap()).ok().unwrap(),
+            Value::String("hello".to_string())
+        );
+
+        assert_eq!(
             parse(tokenize("true").unwrap()).ok().unwrap(),
             Value::Bool(true)
         );
@@ -31,6 +38,7 @@ mod tests {
             parse(tokenize("false").unwrap()).ok().unwrap(),
             Value::Bool(false)
         );
+
         assert_eq!(parse(tokenize("null").unwrap()).ok().unwrap(), Value::Null);
     }
 }
